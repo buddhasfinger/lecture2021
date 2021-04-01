@@ -4,19 +4,70 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.site.mapper.BoardMapper">
+  
+   <!--contentview -->
+  <select id="selectBoardContent_view" resultType="com.site.dto.BoardDto">
+			select * from notice_board where bid=#{bid}
+  </select>
+   <select id="selectUpHit" >
+			update notice_board set bhit=bhit+1 where bid=#{bid}
+  </select>
+  
+  <!-- write -->
+     <insert id="insertBoardWrite" >
+			<![CDATA[
+					insert into notice_board values(
+					board_seq.nextval,#{bname},#{btitle},#{bcontent},sysdate,
+					0,board_seq.currval,0,0,#{filename})
+		]]>
+  	</insert>
+  
+  <!--전체리스트 -->
   <select id="selectBoardListAll" resultType="com.site.dto.BoardDto">
 		select * from
 		<![CDATA[(select rownum rnum, a.* from
-		(select * from notice_board order by bGroup desc, bStep asc) a)
-		where rnum >=1 and rnum <=10  ]]>
+		(select * from notice_board order by bgroup desc, bStep asc) a)
+		where rnum >=#{startrow} and rnum <=#{endrow}]]>
   </select>
   
-   <select id="selectBoardContentView" parameterType="String" resultType="com.site.dto.BoardDto">
-		select * from notice_board where bId=#{bId}
+  <!-- 타이틀 검색 -->
+  <select id="selectBoardListTitle" resultType="com.site.dto.BoardDto">
+		<![CDATA[
+		select * from (select rownum rnum,a.* from
+		(select * from notice_board where btitle like '%'||#{search}||'%'
+		order by bGroup desc, bStep asc) a)
+		where rnum>=#{startrow} and rnum<=#{endrow}
+		]]>
   </select>
   
-   <select id="selectloginCheck" parameterType="com.site.dto.MemberDto" resultType="com.site.dto.MemberDto">
-		select * from member where id=#{id} and pw=#{pw}
+  <!-- 내용 검색 -->
+  <select id="selectBoardListContent" resultType="com.site.dto.BoardDto">
+		<![CDATA[
+		select * from (select rownum rnum,a.* from
+		(select * from notice_board where bcontent like '%'||#{search}||'%'
+		order by bGroup desc, bStep asc) a)
+		where rnum>=#{startrow} and rnum<=#{endrow}
+		]]>
   </select>
+    <!-- 전체 검색 -->
+  <select id="selectBoardListSearchAll" resultType="com.site.dto.BoardDto">
+		<![CDATA[
+		select * from (select rownum rnum,a.* from
+		(select * from notice_board where bcontent like '%'||#{search}||'%' or btitle like '%'||#{search}||'%' 
+		order by bGroup desc, bStep asc) a)
+		where rnum>=#{startrow} and rnum<=#{endrow}
+		]]>
+  </select>
+  
+  <!-- 전체리스트 개수 -->
+   <select id="listCount" resultType="int">
+		select count(*) from notice_board
+  </select>
+  
+  <!-- title 검색리스트 -->
+     <select id="listCountTitle" resultType="int">
+	<![CDATA[	select count(*) from notice_board where btitle like '%'||#{search}||'%']]>
+  </select>
+  
   
 </mapper>

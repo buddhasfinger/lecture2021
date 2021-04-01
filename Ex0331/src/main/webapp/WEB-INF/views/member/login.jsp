@@ -20,7 +20,7 @@
 				success:function(data){  //받는 데이터
 					if(data.loginCheck==1){
 						alert("로그인 성공");
-						location.href="../board/index";
+						location.href="/index";
 					}else{
 						alert("ID 와 Password가 일치하지 않습니다.");
 						$("#uId").val().focus();

@@ -19,4 +19,5 @@ public class BoardDto {
 	private int bgroup;
 	private int bstep;
 	private int bindent;
+	private String filename;
 }
