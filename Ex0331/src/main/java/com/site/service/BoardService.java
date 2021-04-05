@@ -14,4 +14,12 @@ public interface BoardService {
 
 	void BoardWrite(BoardDto boardDto, MultipartFile file);
 
+	Map<String, Object> boardModify_view(String bid, String page, String category, String search);
+
+	void BoardModify(BoardDto boardDto, MultipartFile file);
+
+	void boardReply(BoardDto boardDto, MultipartFile file);
+
+	void boardDelete(String bid);
+
 }

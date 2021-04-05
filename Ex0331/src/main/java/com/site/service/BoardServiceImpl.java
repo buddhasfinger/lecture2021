@@ -62,10 +62,10 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public Map<String, Object> boardContent_view(String bid, String page, String category, String search) {
-		// content 1개 가져오기
-		boardDto = boardMapper.selectBoardContent_view(bid);
 		// 조회수 1 증가
 		boardMapper.selectUpHit(bid);
+		// content 1개 가져오기
+		boardDto = boardMapper.selectBoardContent_view(bid);
 		map.put("boardDto", boardDto);
 		map.put("category", category);
 		map.put("search", search);
@@ -102,6 +102,89 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.insertBoardWrite(boardDto);
 
 		return;
+	}
+
+	@Override
+	public Map<String, Object> boardModify_view(String bid, String page, String category, String search) {
+		// content 1개 가져오기
+		boardDto = boardMapper.selectBoardContent_view(bid);
+		map.put("boardDto", boardDto);
+		map.put("category", category);
+		map.put("search", search);
+		map.put("page", page);
+
+		return map;
+	}
+
+	@Override
+	public void BoardModify(BoardDto boardDto, MultipartFile file) {
+			// 원본파일이름
+			String orgfilename = file.getOriginalFilename();
+			System.out.println("impl:"+orgfilename);
+		if (file.getSize() != 0) { //파일사이즈가 0이 아니면 
+			// 파일 저장 위치
+			String fileUrl = "C:/Users/User/git/lectures/Ex0331/src/main/resources/static/upload/"; // 꼭 마지막에도 / 넣어야 그
+			// 신규파일이름 (32자리 이름 생성.확장자명)
+			// 이름에 시간추가
+			long time = System.currentTimeMillis();
+			//String uploadFileName = RandomStringUtils.randomAlphanumeric(32) + "." + fileNameExtension;
+			String uploadFileName = String.format("%d_%s",time,orgfilename);
+			File f = new File(fileUrl + uploadFileName);
+			try {
+				file.transferTo(f);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// 파일이름저장
+			boardDto.setFilename(uploadFileName);
+		}else {
+			//기존 파일이름을 그대로 저장시키면 됨.
+			//boardDto.setFilename("");
+		}
+
+		// mapper전달
+		boardMapper.updateBoardWrite(boardDto);
+
+
+	}
+
+	@Override
+	public void boardReply(BoardDto boardDto, MultipartFile file) {
+		// 원본파일이름
+		String orgfilename = file.getOriginalFilename();
+		System.out.println("impl:" + orgfilename);
+		if (file.getSize() != 0) { // 파일사이즈가 0이 아니면
+			// 파일 저장 위치
+			String fileUrl = "C:/Users/User/git/lectures/Ex0331/src/main/resources/static/upload/"; // 꼭 마지막에도 / 넣어야 그
+			// 신규파일이름 (32자리 이름 생성.확장자명)
+			// 이름에 시간추가
+			long time = System.currentTimeMillis();
+			// String uploadFileName = RandomStringUtils.randomAlphanumeric(32) + "." +
+			// fileNameExtension;
+			String uploadFileName = String.format("%d_%s", time, orgfilename);
+			File f = new File(fileUrl + uploadFileName);
+			try {
+				file.transferTo(f);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// 파일이름저장
+			boardDto.setFilename(uploadFileName);
+		} else {
+			// 기존 파일이름을 그대로 저장시키면 됨.
+			 boardDto.setFilename("");
+		}
+
+		// mapper전달
+		boardMapper.insertBoardReply(boardDto);
+		boardMapper.insertBoardReplyPlus(boardDto);
+		
+
+	}
+
+	@Override
+	public void boardDelete(String bid) {
+		boardMapper.deleteBoardDelete(bid);
 	}
 
 }

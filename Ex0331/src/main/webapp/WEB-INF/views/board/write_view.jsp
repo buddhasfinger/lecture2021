@@ -11,41 +11,33 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/write.css">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!--   	<script> -->
-<!-- //     	function writeCheck(){ -->
-<!-- //     		alert('성공'); -->
-<!-- //     		var form= $('#writeForm')[0]; -->
-<!-- //     		//FormData 객체 생성 -->
-<!-- //     		var formData = new FormData(form); -->
-<!-- //     		$.ajax({ -->
-<!-- // 				url:"./write", -->
-<!-- // 				type:"post", -->
-<!-- // 				enctype:"multipart/form-data", -->
-<!-- // 				data: -->
-<!-- // 					formData, -->
-<!-- // 					processData:false, -->
-<!-- // 					contentType:false, -->
-<!-- // 					cache:false -->
-<!-- // 					//$("#writeForm").serialize() -->
-<!-- // 					//id:"aaa",pw:"1111" //보내는 데이터 -->
-					
-<!-- // 				, -->
-<!-- // 				contentType:false, -->
-<!-- // 				success:function(data){  //받는 데이터 -->
-<!-- // 						alert(data.message); -->
-<!-- // 					/* if(data.loginCheck==1){ -->
-<!-- // 					}else{ -->
-<!-- // 						alert("에러"); -->
-<!-- // 					} */ -->
-				
-<!-- // 				}, -->
-				
-<!-- // 				error:function(){ -->
-<!-- // 					alert("에러"); -->
-<!-- // 				} -->
-<!-- // 			}); -->
-<!-- //     	} -->
-<!--     </script> -->
+  	<script>
+			function writeCheck(){
+    		alert('성공'); 
+    		if($("#btitle").val()==""){
+    			alert('제목을 꼭 적어주세요'); 
+    			$("#btitle").focus();
+    			return false;
+    		}
+     		$.ajax({ 
+				url:"./write1", 
+ 				type:"post", 
+				enctype:"multipart/form-data",
+				data:
+					new	FormData($('#writeForm')[0]), 
+					processData:false,
+					contentType:false, 
+ 					cache:false, 
+					success:function(data){  //받는 데이터 -->
+						alert('게시판 등록이 완료되었습니다.'); 
+						location.href="./list";
+				}, 
+ 				error:function(){ 
+ 					alert("에러");
+ 				} 
+			}); 
+		}
+     </script> 
   
   
 </head>
@@ -54,7 +46,7 @@
     <h1>관리자 글쓰기</h1>
     <hr>
 
-    <form action="./write" id="writeForm"  name="write" method="post" enctype="multipart/form-data">
+    <form action="./write" id="writeForm"  name="writeForm" method="post" enctype="multipart/form-data">
       <table>
         <colgroup>
           <col width="15%">
@@ -63,19 +55,19 @@
         <tr>
           <th>작성자</th>
           <td>
-            <input type="text" name="bname">
+            <input type="text" name="bname" id="bname">
           </td>
         </tr>  
         <tr>
           <th>제목</th>
           <td>
-            <input type="text" name="btitle">
+            <input type="text" name="btitle" id="btitle">
           </td>
         </tr>
         <tr>
           <th>내용</th>
           <td>
-            <textarea name="bcontent" cols="50" rows="10"></textarea>
+            <textarea name="bcontent" id="bcontent" cols="50" rows="10"></textarea>
           </td>
         </tr>
         <tr>
@@ -87,7 +79,7 @@
       </table>
       <hr>
       <div class="button-wrapper">
-        <button type="submit"  class="write">작성완료</button>
+        <button type="button" onclick="writeCheck()" class="write">작성완료</button>
         <button type="button" class="cancel" onclick="javascript:location.href='./list'">취소</button>
       </div>
     </form>

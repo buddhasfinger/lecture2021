@@ -16,9 +16,9 @@
   </style>
   <script type="text/javascript">
   	function delete_check(){
+  			alert('삭제기능 도나');
   		if(confirm("삭제 하시겠습니까?")){
-  			location.href="delete?page=${map.page }&bid=${map.boardDto.bid }";
-  			
+  			location.href="./delete?page=${map.page }&bid=${map.boardDto.bid }&category=${map.category}&search=${map.search}";
   		}else{
   			return false;
   		}	
@@ -48,7 +48,7 @@
         <td>${map.boardDto.bhit }</td>
       </tr>
       <tr>
-        <td colspan="3" class="article">${dto.bcontent }</td>
+        <td colspan="3" class="article">${map.boardDto.bcontent }</td>
       </tr>
       <tr>
       	<td>파일첨부 </td>
@@ -69,8 +69,8 @@
 
     <a href="list?category=${map.category}&search=${map.search}&page=${map.page }"><div class="list">목록</div></a>
     <div class="list mouseCursor"  onclick="delete_check()">삭제</div>
-    <a href="bModify_view?category=${map.category}&search=${map.search}&page=${map.page}&bid=${map.boardDto.bid}"><div class="list">수정</div></a>
-    <a href="bReplyView?category=${map.category}&search=${map.search}&page=${map.page}&bid=${map.boardDto.bid}"><div class="list">답변달기</div></a>
+    <a href="modify_view?category=${map.category}&search=${map.search}&page=${map.page}&bid=${map.boardDto.bid}"><div class="list">수정</div></a>
+    <a href="reply_view?category=${map.category}&search=${map.search}&page=${map.page}&bid=${map.boardDto.bid}"><div class="list">답변달기</div></a>
   </section>
 </body>
 </html>
