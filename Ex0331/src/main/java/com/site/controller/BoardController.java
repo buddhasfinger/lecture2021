@@ -106,6 +106,7 @@ public class BoardController {
 		model.addAttribute("map",map);
 		return "board/content_view";
 	}
+	
 	@RequestMapping("/board/write_view")
 	public String write_view() {
 		return "board/write_view";

@@ -27,6 +27,8 @@ public class BoardServiceImpl implements BoardService {
 	Map<String, Object> map = new HashMap<String, Object>();
 	List<BoardDto> list;
 	BoardDto boardDto;
+	BoardDto preDto;
+	BoardDto nextDto;
 	int limit;
 
 	@Override
@@ -66,6 +68,24 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.selectUpHit(bid);
 		// content 1개 가져오기
 		boardDto = boardMapper.selectBoardContent_view(bid);
+		
+		// 리스트 가져오는 메소드
+		if (category == null || category.equals("")) { // 검색이 없을때
+			//이전글 다음글을 가지고 옴
+			preDto = boardMapper.selectBoard_pre(bid);
+			nextDto = boardMapper.selectBoard_next(bid);
+		} else if (category.equals("title")) { // option: title search: 제목
+			preDto = boardMapper.selectBoard_preTitle(bid,search);
+			nextDto = boardMapper.selectBoard_nextTitle(bid,search);
+		} else if (category.equals("content")) {
+			preDto = boardMapper.selectBoard_preContent(bid,search);
+			nextDto = boardMapper.selectBoard_nextContent(bid,search);
+		} else if (category.equals("all")) {
+			preDto = boardMapper.selectBoard_preAll(bid,search);
+			nextDto = boardMapper.selectBoard_nextAll(bid,search);
+		}
+		map.put("preDto", preDto);
+		map.put("nextDto", nextDto);
 		map.put("boardDto", boardDto);
 		map.put("category", category);
 		map.put("search", search);
